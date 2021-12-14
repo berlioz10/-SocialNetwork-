@@ -1,6 +1,7 @@
 package Control;
 
 import Domain.Friendship;
+import Domain.FriendshipDTO;
 import Domain.Message;
 import Domain.User;
 import Exceptions.BusinessException;
@@ -12,6 +13,7 @@ import Repo.DatabaseUserRepository;
 import Repo.Repository;
 import Service.Service;
 import Utils.Graph;
+import Utils.UtilsFunctions;
 import Validate.FriendshipValidator;
 import Validate.MessageValidator;
 import Validate.UserValidator;
@@ -560,6 +562,25 @@ public class Controller {
         }
 
         return friendships;
+    }
+
+    public List<FriendshipDTO> getAllTypesOfFriendshipsOf(int id) throws SQLException {
+        List<Friendship> friendshipList = (List<Friendship>) friendshipService.getRecords();
+        friendshipList = friendshipList.stream()
+                .filter((x)-> (x.getOne()==id || x.getTwo() == id)).toList();
+
+        List<User> users = (List<User>) userService.getRecords();
+        List<FriendshipDTO> friendshipDTOS = new ArrayList<>();
+        for(Friendship friendship : friendshipList) {
+            friendshipDTOS.add(new FriendshipDTO(
+                    friendship.getId(),
+                    users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
+                    users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
+                    friendship.getDate(),
+                    UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
+            ));
+        }
+        return friendshipDTOS;
     }
 }
 

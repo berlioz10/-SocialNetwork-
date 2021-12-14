@@ -10,6 +10,11 @@ import java.util.Objects;
 public class Friendship implements Identifiable<Integer> {
     private int id;
     private int one, two;
+
+    public Date getDate() {
+        return date;
+    }
+
     private Date date;
     private int friendship_request;
 
