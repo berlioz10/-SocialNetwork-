@@ -572,13 +572,24 @@ public class Controller {
         List<User> users = (List<User>) userService.getRecords();
         List<FriendshipDTO> friendshipDTOS = new ArrayList<>();
         for(Friendship friendship : friendshipList) {
-            friendshipDTOS.add(new FriendshipDTO(
-                    friendship.getId(),
-                    users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
-                    users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
-                    friendship.getDate(),
-                    UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
-            ));
+            if(friendship.getOne() == id)
+                friendshipDTOS.add(new FriendshipDTO(
+                        0,
+                        friendship.getId(),
+                        users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
+                        friendship.getDate(),
+                        UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
+                ));
+            else
+                friendshipDTOS.add(new FriendshipDTO(
+                        1,
+                        friendship.getId(),
+                        users.stream().filter((x) -> x.getId() == friendship.getTwo()).toList().get(0).toString(),
+                        users.stream().filter((x) -> x.getId() == friendship.getOne()).toList().get(0).toString(),
+                        friendship.getDate(),
+                        UtilsFunctions.transormIntegerToStatusFriendship(friendship.getFriendship_request())
+                ));
         }
         return friendshipDTOS;
     }

@@ -21,6 +21,9 @@ public class HelloController {
     private Controller controller = Controller.getInstance();
 
     @FXML
+    private TableColumn<FriendshipDTO, String> relationColumn;
+
+    @FXML
     private TableView<FriendshipDTO> friendshipTable;
 
     @FXML
@@ -28,6 +31,11 @@ public class HelloController {
 
     @FXML
     private TableColumn<FriendshipDTO, String> statusColumn;
+
+    @FXML
+    public void initialize() {
+        load();
+    }
 
     public void setController(Controller controller) {
         this.controller = controller;
@@ -37,7 +45,8 @@ public class HelloController {
         try {
             List<FriendshipDTO> friendships = controller.getAllTypesOfFriendshipsOf(6);
 
-            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirst_name()));
+            relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
+            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecond_name()));
             statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
 
             friendshipTable.setItems(FXCollections.observableList(friendships));
@@ -46,10 +55,5 @@ public class HelloController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    protected void onClick() {
-        load();
     }
 }
