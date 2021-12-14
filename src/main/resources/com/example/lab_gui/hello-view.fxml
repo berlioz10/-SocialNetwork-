@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -14,6 +16,27 @@
                   <TableColumn fx:id="relationColumn" prefWidth="53.60000687837601" text="Relation" />
                 <TableColumn fx:id="userColumn" prefWidth="111.99999618530273" text="User" />
                   <TableColumn fx:id="statusColumn" prefWidth="62.4000244140625" text="Status" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+      <VBox prefHeight="400.0" prefWidth="342.0">
+         <children>
+            <VBox prefHeight="67.0" prefWidth="317.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="66.0" prefWidth="98.0" text="Current user" />
+                        <TextField fx:id="selectedUser" alignment="CENTER" prefHeight="89.0" prefWidth="226.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <TableView fx:id="userTable" prefHeight="144.0" prefWidth="317.0">
+              <columns>
+                <TableColumn fx:id="userID" prefWidth="34.399961829185486" text="ID" />
+                  <TableColumn fx:id="userSurname" prefWidth="136.80005645751953" text="Surname" />
+                  <TableColumn fx:id="userFirstName" prefWidth="145.5999755859375" text="First Name" />
               </columns>
             </TableView>
          </children>

@@ -1,9 +1,6 @@
 package Control;
 
-import Domain.Friendship;
-import Domain.FriendshipDTO;
-import Domain.Message;
-import Domain.User;
+import Domain.*;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
@@ -38,19 +35,19 @@ public class Controller {
     private Service<Integer, Message> messageService;
 
     private Controller() {
-        String url = "jdbc:postgresql://localhost:5432/mesagerie";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         Repository<Integer, User> userRepository = new DatabaseUserRepository(
-                url, "postgres", "1234");
+                url, "postgres", "alpha109");
         Validator<Integer, User> userValidator = new Validator<>(new UserValidator());
         userService = new UserService(userRepository, userValidator);
 
         Repository<Integer, Friendship> friendshipRepository = new DatabaseFriendshipRepository(
-                url, "postgres", "1234");
+                url, "postgres", "alpha109");
         Validator<Integer, Friendship> friendshipValidator = new Validator<>(new FriendshipValidator());
         friendshipService = new FriendshipService(friendshipRepository, friendshipValidator);
 
         Repository<Integer, Message> messageRepository = new DatabaseMessageRepository(
-                url, "postgres", "1234");
+                url, "postgres", "alpha109");
         Validator<Integer, Message> messageValidator = new Validator<>(new MessageValidator());
         messageService = new MessageService(messageRepository, messageValidator);
     }
@@ -592,6 +589,15 @@ public class Controller {
                 ));
         }
         return friendshipDTOS;
+    }
+
+    public List<UserDTO> getAllUsersDTO() throws SQLException {
+        List<User> users = (List<User>) userService.getRecords();
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for(User user: users){
+            userDTOS.add(new UserDTO(user.getId(),user.getFirstName(),user.getSurname()));
+        }
+        return userDTOS;
     }
 }
 
