@@ -28,7 +28,7 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label alignment="CENTER" prefHeight="66.0" prefWidth="98.0" text="Current user" />
-                        <TextField fx:id="selectedUser" alignment="CENTER" prefHeight="89.0" prefWidth="226.0" />
+                        <TextField fx:id="selectedUser" alignment="CENTER" onKeyPressed="#tryToFindUserByID" prefHeight="89.0" prefWidth="226.0" />
                      </children>
                   </HBox>
                </children>

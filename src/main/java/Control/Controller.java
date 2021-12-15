@@ -35,19 +35,19 @@ public class Controller {
     private Service<Integer, Message> messageService;
 
     private Controller() {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/mesagerie";
         Repository<Integer, User> userRepository = new DatabaseUserRepository(
-                url, "postgres", "alpha109");
+                url, "postgres", "postgres");
         Validator<Integer, User> userValidator = new Validator<>(new UserValidator());
         userService = new UserService(userRepository, userValidator);
 
         Repository<Integer, Friendship> friendshipRepository = new DatabaseFriendshipRepository(
-                url, "postgres", "alpha109");
+                url, "postgres", "postgres");
         Validator<Integer, Friendship> friendshipValidator = new Validator<>(new FriendshipValidator());
         friendshipService = new FriendshipService(friendshipRepository, friendshipValidator);
 
         Repository<Integer, Message> messageRepository = new DatabaseMessageRepository(
-                url, "postgres", "alpha109");
+                url, "postgres", "postgres");
         Validator<Integer, Message> messageValidator = new Validator<>(new MessageValidator());
         messageService = new MessageService(messageRepository, messageValidator);
     }

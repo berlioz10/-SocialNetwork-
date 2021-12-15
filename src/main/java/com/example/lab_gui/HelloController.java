@@ -3,6 +3,7 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.Friendship;
 import Domain.FriendshipDTO;
+import Domain.User;
 import Domain.UserDTO;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
@@ -12,13 +13,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class HelloController {
 
@@ -29,6 +31,9 @@ public class HelloController {
     private UserDTO passiveUserControl=null;
 
     // all users
+    @FXML
+    private Alert messageBox;
+
     @FXML
     private TextField selectedUser;
 
@@ -90,165 +95,197 @@ public class HelloController {
         this.controller = controller;
     }
 
-    public void load_friendships(){
+    private void load_friendships() throws SQLException {
 
         List<FriendshipDTO> friendships=null;
         if(currentUserControl!=null){
-            try {
                 friendships = controller.getAllTypesOfFriendshipsOf(currentUserControl.getId());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
             friendshipTable.setItems(FXCollections.observableList(friendships));
         }
-
-    }
-
-    public void load() {
-        try {
-
-            List<FriendshipDTO> friendships=null;
-            if(currentUserControl!=null){
-                friendships = controller.getAllTypesOfFriendshipsOf(currentUserControl.getId());
-                friendshipTable.setItems(FXCollections.observableList(friendships));
-            }
-
-            relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
-            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecond_name()));
-            statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
-
-
-
-
-            List<UserDTO> userDTOS = controller.getAllUsersDTO();
-
-            userID.setCellValueFactory((data)-> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
-            userFirstName.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getFirstName()));
-            userSurname.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getSurname()));
-
-            userTable.setItems(FXCollections.observableList(userDTOS));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void selectedUser(MouseEvent mouseEvent) {
-        currentUserControl = userTable.getSelectionModel().getSelectedItem();
-        selectedUser.setText(
-                currentUserControl.toString()
-        );
-        load_friendships();
-    }
-
-    public void revealPotentialFriends(ActionEvent actionEvent) {
-        if(currentUserControl!=null)
-        {
-            List<UserDTO> hiddenUserDTO;
-            hiddenTable.setVisible(true);
-            changeStatusSection.setVisible(true);
-            changeFriendStatus.setText("Send request");
-            try {
-                hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
-                        x-> {
-                            try {
-                                return !controller.areFriends(currentUserControl.getId(),x.getId()) &&
-                                        x.getId() != currentUserControl.getId();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-                ).toList();
-
-
-
-                hiddenID.setCellValueFactory((data)-> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
-                hiddenFirstName.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getFirstName()));
-                hiddenSurname.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getSurname()));
-
-                hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        if(friendships == null ||friendships.isEmpty()){
+            friendshipTable.setPlaceholder(new Label("There are no friendships to show \n for now :'("));
         }
 
     }
 
-    public void revealCurrentFriends(ActionEvent actionEvent) {
+    private void load_users() throws SQLException {
+        List<UserDTO> userDTOS = controller.getAllUsersDTO();
+        userTable.setItems(FXCollections.observableList(userDTOS));
+    }
+
+    private void load_friends() throws SQLException {
         if(currentUserControl!=null){
 
             List<UserDTO> hiddenUserDTO;
             hiddenTable.setVisible(true);
             changeStatusSection.setVisible(true);
             changeFriendStatus.setText("Unfriend");
-            try {
-                hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
-                        x-> {
-                            try {
-                                return controller.areFriends(currentUserControl.getId(),x.getId());
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                            return false;
+            hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
+                    x-> {
+                        try {
+                            return controller.areFriends(currentUserControl.getId(),x.getId());
+                        } catch (SQLException ignored) {
                         }
-                ).toList();
+                        return false;
+                    }
+            ).toList();
 
-                hiddenID.setCellValueFactory((data)-> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
-                hiddenFirstName.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getFirstName()));
-                hiddenSurname.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getSurname()));
-
-                hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
-            } catch (SQLException e) {
-                e.printStackTrace();
+            hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
+            if(hiddenUserDTO.isEmpty()){
+                hiddenTable.setPlaceholder(new Label("For the moment there are no friends to show \n" +
+                        "Try again after you make some :P"));
+                passiveUserControl=null;
             }
         }
     }
 
-    public void changeStatusOfFriendship(ActionEvent actionEvent) {
-        if(passiveUserName!=null && currentUserControl!=null){
-            AtomicInteger hideFlag = new AtomicInteger();
+    private void load_befriendable() throws SQLException {
+        if(currentUserControl!=null)
+        {
+            List<UserDTO> hiddenUserDTO;
+            hiddenTable.setVisible(true);
+            changeStatusSection.setVisible(true);
+            changeFriendStatus.setText("Send request");
+            hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
+                    x-> {
+                        try {
+                            return !controller.areFriends(currentUserControl.getId(),x.getId()) &&
+                                    x.getId() != currentUserControl.getId() &&
+                                    !controller.getSentFriendships(currentUserControl.getId())
+                                            .contains(new Friendship(0,currentUserControl.getId(),x.getId()));
+                        } catch (SQLException ignored){}
+                        return false;
+                    }
+            ).toList();
+
+            hiddenTable.setItems(FXCollections.observableList(hiddenUserDTO));
+            if(hiddenUserDTO.isEmpty()){
+                hiddenTable.setPlaceholder(new Label("It looks like you've got lots of friends \n" +
+                        "There's no one to add at the moment XD"));
+                passiveUserControl = null;
+            }
+        }
+    }
+
+    private void hide_relations_menu() throws SQLException {
+            changeStatusSection.setVisible(false);
+            hiddenTable.setVisible(false);
+            changeFriendStatus.setText("Unfriend\\Befriend");
+            passiveUserControl = null;
+            passiveUserName.setText( "Nume Prenume");
+            load_friendships();
+    }
+
+    public void load() {
+        try {
+
+            relationColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStringRelation()));
+            userColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSecond_name()));
+            statusColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getStatus()));
+
+
+            userID.setCellValueFactory((data)-> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
+            userFirstName.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getFirstName()));
+            userSurname.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getSurname()));
+
+            hiddenID.setCellValueFactory((data)-> new SimpleStringProperty(Integer.toString(data.getValue().getId())));
+            hiddenFirstName.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getFirstName()));
+            hiddenSurname.setCellValueFactory((data)-> new SimpleStringProperty(data.getValue().getSurname()));
+
+            load_friendships();
+            load_users();
+
+
+        } catch (SQLException ignored) {}
+    }
+
+    @FXML
+    private void selectedUser(MouseEvent mouseEvent) throws SQLException {
+        currentUserControl = userTable.getSelectionModel().getSelectedItem();
+        if(currentUserControl!=null) {
+            selectedUser.setText(
+                    currentUserControl.toString()
+            );
+            load_friendships();
+            hide_relations_menu();
+        }
+    }
+
+    @FXML
+    private void setPassiveUser(MouseEvent mouseEvent) {
+        passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
+        if(passiveUserControl!=null) {
+            passiveUserName.setText(
+                    passiveUserControl.toString()
+            );
+        }
+    }
+
+    public void revealPotentialFriends(ActionEvent actionEvent) throws SQLException {
+        load_befriendable();
+
+    }
+
+    public void revealCurrentFriends(ActionEvent actionEvent) throws SQLException {
+       load_friends();
+    }
+
+    public void changeStatusOfFriendship(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+        if(passiveUserControl!=null && currentUserControl!=null){
+
             if(Objects.equals(changeFriendStatus.getText(), "Send request")){
-                try {
                     controller.sendFriendship(currentUserControl.getId(),passiveUserControl.getId());
-                    hideFlag.set(1);
-                } catch (ValidateException | BusinessException | SQLException | RepoException e) {
-                    e.printStackTrace();
-                }
+                    hide_relations_menu();
             }
             else if(Objects.equals(changeFriendStatus.getText(), "Unfriend")){
-                try {
                     Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
                     friendshipList.forEach(friendship -> {
                                 if (friendship.getOne() == passiveUserControl.getId() ||
                                         friendship.getTwo() == passiveUserControl.getId()) {
                                     try {
                                         controller.deleteFriendship(friendship.getId());
-                                        hideFlag.set(1);
-                                    } catch (RepoException | SQLException e) {
-                                        e.printStackTrace();
+                                        hide_relations_menu();
+                                    } catch (RepoException | SQLException ignored) {
                                     }
                                 }
                             }
                     );
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
+
             }
-            if(hideFlag.get() == 1){
-                changeStatusSection.setVisible(false);
-                hiddenTable.setVisible(false);
-                changeFriendStatus.setText("Unfriend\\Befriend");
-                load_friendships();
-            }
+
         }
 
     }
 
-    public void setPassiveUser(MouseEvent mouseEvent) {
-        passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
-        passiveUserName.setText(
-                passiveUserControl.toString()
-        );
+    private void initMessageBox(){
+        messageBox = new Alert(Alert.AlertType.INFORMATION);
+        messageBox.setTitle("Warning");
+        messageBox.setHeaderText("You've really done it now");
+        messageBox.setContentText("This is a secret message, congratulations! ");
     }
+
+    public void summonMessageBoxText(String newText){
+        if(messageBox==null)
+            initMessageBox();
+        messageBox.setContentText(newText);
+        messageBox.show();
+    }
+
+    public void tryToFindUserByID(KeyEvent keyEvent) throws SQLException {
+        if(keyEvent.getCode()!= KeyCode.ENTER)
+            return;
+        try {
+            int tempId = Integer.parseInt(selectedUser.getText());
+                User tempUser  = controller.findUser(tempId);
+                if(tempUser!=null)
+                    selectedUser.setText(new UserDTO(tempId, tempUser.getFirstName(),tempUser.getSurname()).toString());
+                else
+                    throw new NumberFormatException("This is not the user that you are looking for");
+        }
+        catch(NumberFormatException numberFormatException){
+            summonMessageBoxText("Try searchig by id number");
+        }
+    }
+
 }
