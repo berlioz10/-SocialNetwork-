@@ -25,10 +25,6 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+        return  id +" / "+ firstName + " " + surname ;
     }
 }

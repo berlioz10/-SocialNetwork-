@@ -599,5 +599,15 @@ public class Controller {
         }
         return userDTOS;
     }
+
+    public Boolean areFriends(int id1, int id2) throws SQLException{
+        for (Friendship friendship: friendshipService.getRecords())
+            if(
+                    ((friendship.getOne() == id1 && friendship.getTwo() == id2) ||
+                            (friendship.getOne() == id2 && friendship.getTwo() == id1))
+                    && friendship.getFriendship_request() == 2)
+                return true;
+        return false;
+    }
 }
 
