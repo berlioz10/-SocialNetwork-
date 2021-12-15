@@ -12,7 +12,7 @@
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="226.0">
          <children>
-            <TableView fx:id="friendshipTable" prefHeight="403.0" prefWidth="226.0">
+            <TableView fx:id="friendshipTable" onMouseClicked="#selectFriendship" prefHeight="403.0" prefWidth="226.0">
               <columns>
                   <TableColumn fx:id="relationColumn" prefWidth="53.60000687837601" text="Relation" />
                 <TableColumn fx:id="userColumn" prefWidth="111.99999618530273" text="User" />

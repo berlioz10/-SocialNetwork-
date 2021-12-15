@@ -23,6 +23,8 @@ public class HelloApplication extends Application {
         stage.getIcons().add(new Image("file:src/main/resources/Images/dead_inside_emoji.jpg"));
         stage.setTitle("Radu Dragos");
         stage.setScene(scene);
+        stage.setMinHeight(320);
+        stage.setMinWidth(550);
         stage.show();
     }
 

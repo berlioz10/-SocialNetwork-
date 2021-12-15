@@ -19,8 +19,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class HelloController {
 
@@ -29,6 +31,7 @@ public class HelloController {
     private Controller controller = Controller.getInstance();
     private UserDTO currentUserControl=null;
     private UserDTO passiveUserControl=null;
+    private FriendshipDTO selectedFriendship=null;
 
     // all users
     @FXML
@@ -152,7 +155,9 @@ public class HelloController {
                         try {
                             return !controller.areFriends(currentUserControl.getId(),x.getId()) &&
                                     x.getId() != currentUserControl.getId() &&
-                                    !controller.getSentFriendships(currentUserControl.getId())
+                                    !controller.getSentFriendships(currentUserControl.getId()).stream().filter(
+                                            y-> y.getFriendship_request()==0 || y.getFriendship_request() ==2
+                                            ).toList()
                                             .contains(new Friendship(0,currentUserControl.getId(),x.getId()));
                         } catch (SQLException ignored){}
                         return false;
@@ -288,4 +293,41 @@ public class HelloController {
         }
     }
 
+    public void selectFriendship(MouseEvent mouseEvent) throws SQLException, ValidateException, BusinessException, RepoException {
+        selectedFriendship = friendshipTable.getSelectionModel().getSelectedItem();
+
+        if(     selectedFriendship!=null &&
+                selectedFriendship.getRelation()==1 &&
+                Objects.equals(selectedFriendship.getStatus(), "Waiting...")
+        ){
+            Alert acceptOrReject = new Alert(Alert.AlertType.CONFIRMATION);
+            acceptOrReject.setTitle("Do you confirm this friendship request ?");
+            acceptOrReject.setContentText("The user " + selectedFriendship.getSecond_name()+
+                    " has sent you a friend request");
+
+            hide_relations_menu();
+            ButtonType acceptRequest = new ButtonType("Accept");
+            ButtonType rejectRequest = new ButtonType("Reject");
+            ButtonType ignore = new ButtonType("Ignore for now", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            acceptOrReject.getButtonTypes().setAll(acceptRequest, rejectRequest, ignore);
+            int user_id = Integer.parseInt(selectedFriendship.getFirst_name().split(";")[0]);
+
+            Optional<ButtonType> result = acceptOrReject.showAndWait();
+
+            if(result.isPresent()){
+                if (result.get() == acceptRequest){
+                    controller.acceptFriendship(selectedFriendship.getId(),user_id);
+                    selectedFriendship = null;
+                }
+                else if (result.get() == rejectRequest){
+                    controller.rejectFriendship(selectedFriendship.getId(),user_id);
+                    selectedFriendship = null;
+                }else {
+                    selectedFriendship=null;
+                }
+                load_friendships();
+            }
+        }
+    }
 }
