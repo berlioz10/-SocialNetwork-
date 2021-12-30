@@ -4,11 +4,13 @@ import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import javafx.application.Application;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,12 +23,25 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 400);
 
-        stage.getIcons().add(new Image("file:src/main/resources/Images/Webber.png"));
+        //makes all windows related to this application to use the same icon given by the relative path
+        Window.getWindows().addListener((ListChangeListener<Window>) c -> {
+            while (c.next()) {
+                for (Window window : c.getAddedSubList()) {
+                    if (window instanceof Stage) {
+                        ((Stage) window).getIcons().setAll(new Image("file:src/main/resources/Images/Webber.png"));
+                    }
+                }
+            }
+        });
+
         stage.setTitle("Webber");
         stage.setScene(scene);
 
         stage.setMinHeight(315);
         stage.setMinWidth(580);
+
+        stage.setMaxHeight(490);
+        stage.setMaxWidth(980);
         stage.show();
     }
 

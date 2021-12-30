@@ -82,11 +82,14 @@ public class HelloController {
     private TableColumn<UserDTO, String> hiddenFirstName;
     @FXML
     private TableView<UserDTO> hiddenTable;
-    @FXML
-    private TableColumn<FriendshipDTO, String> relationColumn;
 
+
+    // friendship table
     @FXML
     private TableView<FriendshipDTO> friendshipTable;
+
+    @FXML
+    private TableColumn<FriendshipDTO, String> relationColumn;
 
     @FXML
     private TableColumn<FriendshipDTO, String> userColumn;
@@ -97,10 +100,10 @@ public class HelloController {
     @FXML
     public void initialize() {
         load();
-        setController(Controller.getInstance());
+        set_controller(Controller.getInstance());
     }
 
-    private void setController(Controller controller) {
+    private void set_controller(Controller controller) {
         this.controller = controller;
     }
 
@@ -133,7 +136,6 @@ public class HelloController {
 
             hiddenTable.setVisible(true);
             changeStatusSection.setVisible(true);
-
             changeFriendStatus.setText("Unfriend");
 
             hiddenUserDTO = controller.getAllUsersDTO().stream().filter(
@@ -197,12 +199,12 @@ public class HelloController {
         load_friendships();
     }
 
-    private void hideMessages(){
+    private void hide_messages(){
         messageFunctionality.setVisible(false);
         passiveUserControl=null;
     }
 
-    private void showMessages(){
+    private void show_messages(){
         if(passiveUserControl!=null)
         {
             messageFunctionality.setVisible(true);
@@ -214,7 +216,7 @@ public class HelloController {
         }
     }
 
-    private Iterable<String> getMessages() throws SQLException {
+    private Iterable<String> get_messages() throws SQLException {
         if(currentUserControl!=null && passiveUserControl!=null){
             return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
         }
@@ -247,7 +249,7 @@ public class HelloController {
     }
 
     @FXML
-    private void selectedUser(MouseEvent mouseEvent) throws SQLException {
+    private void selected_user(MouseEvent mouseEvent) throws SQLException {
         currentUserControl = userTable.getSelectionModel().getSelectedItem();
         if (currentUserControl != null) {
             selectedUser.setText(
@@ -255,12 +257,12 @@ public class HelloController {
             );
             load_friendships();
             hide_relations_menu();
-            hideMessages();
+            hide_messages();
         }
     }
 
     @FXML
-    private void setPassiveUser(MouseEvent mouseEvent) {
+    private void set_passive_user(MouseEvent mouseEvent) {
         passiveUserControl = hiddenTable.getSelectionModel().getSelectedItem();
         if (passiveUserControl != null) {
             passiveUserName.setText(
@@ -269,22 +271,22 @@ public class HelloController {
         }
     }
 
-    public void revealPotentialFriends(ActionEvent actionEvent) throws SQLException {
+    public void reveal_potential_friends(ActionEvent actionEvent) throws SQLException {
         load_befriendable();
 
     }
 
-    public void revealCurrentFriends(ActionEvent actionEvent) throws SQLException {
+    public void reveal_current_friends(ActionEvent actionEvent) throws SQLException {
         load_friends();
     }
 
-    public void changeStatusOfFriendship(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+    public void change_status_of_friendship(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
         if (passiveUserControl != null && currentUserControl != null) {
 
             if (Objects.equals(changeFriendStatus.getText(), "Send request")) {
                 controller.sendFriendship(currentUserControl.getId(), passiveUserControl.getId());
                 hide_relations_menu();
-                hideMessages();
+                hide_messages();
             } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
                 Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
                 friendshipList.forEach(friendship -> {
@@ -293,7 +295,7 @@ public class HelloController {
                                 try {
                                     controller.deleteFriendship(friendship.getId());
                                     hide_relations_menu();
-                                    hideMessages();
+                                    hide_messages();
                                 } catch (RepoException | SQLException ignored) {
                                 }
                             }
@@ -306,21 +308,21 @@ public class HelloController {
 
     }
 
-    private void initMessageBox() {
+    private void init_message_box() {
         messageBox = new Alert(Alert.AlertType.INFORMATION);
         messageBox.setTitle("Warning");
         messageBox.setHeaderText("You've really done it now");
         messageBox.setContentText("This is a secret message, congratulations! ");
     }
 
-    public void summonMessageBoxText(String newText) {
+    public void summon_message_box(String newText) {
         if (messageBox == null)
-            initMessageBox();
+            init_message_box();
         messageBox.setContentText(newText);
         messageBox.show();
     }
 
-    public void tryToFindUserByID(KeyEvent keyEvent) throws SQLException {
+    public void try_to_find_user_by_ID(KeyEvent keyEvent) throws SQLException {
         if (keyEvent.getCode() != KeyCode.ENTER)
             return;
         try {
@@ -331,11 +333,11 @@ public class HelloController {
             else
                 throw new NumberFormatException("This is not the user that you are looking for");
         } catch (NumberFormatException numberFormatException) {
-            summonMessageBoxText("Try searchig by id number");
+            summon_message_box("Try searchig by id number");
         }
     }
 
-    public void selectFriendship(MouseEvent mouseEvent) throws SQLException, ValidateException, BusinessException, RepoException {
+    public void select_friendship(MouseEvent mouseEvent) throws SQLException, ValidateException, BusinessException, RepoException {
         selectedFriendship = friendshipTable.getSelectionModel().getSelectedItem();
 
         if (selectedFriendship != null &&
@@ -394,11 +396,11 @@ public class HelloController {
         if(selectedFriendship!=null &&
             Objects.equals(selectedFriendship.getStatus(), "Accepted")
         ){
-            loadMessages();
+            load_messages();
         }
     }
 
-    public void loadMessages() throws SQLException {
+    public void load_messages() throws SQLException {
         if(selectedFriendship!=null)
         {
             int passive_user_id = Integer.parseInt(selectedFriendship.getSecond_name().split(";")[0]);
@@ -406,8 +408,8 @@ public class HelloController {
             passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname());
         }
 
-        showMessages();
-        List<String> messages = (List<String>) getMessages();
+        show_messages();
+        List<String> messages = (List<String>) get_messages();
         if(messages!=null && messages.size()!=0)
             messageTable.setItems(FXCollections.observableList(messages));
         else
@@ -416,21 +418,21 @@ public class HelloController {
     }
 
     @FXML
-    public void sendMessage(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+    public void send_message(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
         if(currentUserControl!=null && passiveUserControl!=null){
             String message = messageBody.getText();
             if(message.length()!=0)
             {
                 controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,null);
-                loadMessages();
+                load_messages();
                 messageBody.setText("");
             }
         }
     }
 
-    public void sendMessageViaEnter(KeyEvent keyEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+    public void send_message_via_enter(KeyEvent keyEvent) throws ValidateException, BusinessException, SQLException, RepoException {
         if(keyEvent.getCode()==KeyCode.ENTER){
-            sendMessage(null);
+            send_message(null);
         }
     }
 }
