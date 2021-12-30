@@ -20,14 +20,13 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 400);
-        scene.setFill(Color.ALICEBLUE);
 
         stage.getIcons().add(new Image("file:src/main/resources/Images/Webber.png"));
         stage.setTitle("Webber");
         stage.setScene(scene);
 
-        stage.setMinHeight(320);
-        stage.setMinWidth(550);
+        stage.setMinHeight(315);
+        stage.setMinWidth(580);
         stage.show();
     }
 

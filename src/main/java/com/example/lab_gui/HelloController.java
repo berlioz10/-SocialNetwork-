@@ -12,12 +12,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,10 +30,30 @@ public class HelloController {
     @FXML
     public HBox changeStatusSection;
     public HBox containingWindow;
+
+
+    // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();
     private UserDTO currentUserControl = null;
     private UserDTO passiveUserControl = null;
     private FriendshipDTO selectedFriendship = null;
+
+    // messages
+    @FXML
+    private TableView<String> messageTable;
+
+    @FXML
+    private TableColumn<String,String> messageColumn;
+
+    @FXML
+    private Button sendMessageButton;
+
+    @FXML
+    private VBox messageFunctionality;
+
+    @FXML
+    private TextField messageBody;
+
     // all users
     @FXML
     private Alert messageBox;
@@ -77,9 +97,10 @@ public class HelloController {
     @FXML
     public void initialize() {
         load();
+        setController(Controller.getInstance());
     }
 
-    public void setController(Controller controller) {
+    private void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -176,6 +197,30 @@ public class HelloController {
         load_friendships();
     }
 
+    private void hideMessages(){
+        messageFunctionality.setVisible(false);
+        passiveUserControl=null;
+    }
+
+    private void showMessages(){
+        if(passiveUserControl!=null)
+        {
+            messageFunctionality.setVisible(true);
+            messageColumn.setText("Messages with " +
+                    passiveUserControl.getFirstName() +
+                    " " +
+                    passiveUserControl.getSurname()
+            );
+        }
+    }
+
+    private Iterable<String> getMessages() throws SQLException {
+        if(currentUserControl!=null && passiveUserControl!=null){
+            return controller.getMessagesBy2Users(currentUserControl.getId(),passiveUserControl.getId());
+        }
+        return null;
+    }
+
     public void load() {
         try {
 
@@ -192,12 +237,13 @@ public class HelloController {
             hiddenFirstName.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getFirstName()));
             hiddenSurname.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getSurname()));
 
+            messageColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue()));
+
             load_friendships();
             load_users();
 
 
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
     }
 
     @FXML
@@ -209,6 +255,7 @@ public class HelloController {
             );
             load_friendships();
             hide_relations_menu();
+            hideMessages();
         }
     }
 
@@ -237,6 +284,7 @@ public class HelloController {
             if (Objects.equals(changeFriendStatus.getText(), "Send request")) {
                 controller.sendFriendship(currentUserControl.getId(), passiveUserControl.getId());
                 hide_relations_menu();
+                hideMessages();
             } else if (Objects.equals(changeFriendStatus.getText(), "Unfriend")) {
                 Iterable<Friendship> friendshipList = controller.getFriendshipsOf(currentUserControl.getId());
                 friendshipList.forEach(friendship -> {
@@ -245,6 +293,7 @@ public class HelloController {
                                 try {
                                     controller.deleteFriendship(friendship.getId());
                                     hide_relations_menu();
+                                    hideMessages();
                                 } catch (RepoException | SQLException ignored) {
                                 }
                             }
@@ -340,6 +389,48 @@ public class HelloController {
                     load_friendships();
                 }
             }
+        }
+
+        if(selectedFriendship!=null &&
+            Objects.equals(selectedFriendship.getStatus(), "Accepted")
+        ){
+            loadMessages();
+        }
+    }
+
+    public void loadMessages() throws SQLException {
+        if(selectedFriendship!=null)
+        {
+            int passive_user_id = Integer.parseInt(selectedFriendship.getSecond_name().split(";")[0]);
+            User tempUser = controller.findUser(passive_user_id);
+            passiveUserControl=new UserDTO(tempUser.getId(),tempUser.getFirstName(), tempUser.getSurname());
+        }
+
+        showMessages();
+        List<String> messages = (List<String>) getMessages();
+        if(messages!=null && messages.size()!=0)
+            messageTable.setItems(FXCollections.observableList(messages));
+        else
+            messageTable.setPlaceholder(new Label("There are no messages between you \n" +
+                    " Looks like it's time to change that"));
+    }
+
+    @FXML
+    public void sendMessage(ActionEvent actionEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+        if(currentUserControl!=null && passiveUserControl!=null){
+            String message = messageBody.getText();
+            if(message.length()!=0)
+            {
+                controller.sendMessage(currentUserControl.getId(),passiveUserControl.getId(),message,null);
+                loadMessages();
+                messageBody.setText("");
+            }
+        }
+    }
+
+    public void sendMessageViaEnter(KeyEvent keyEvent) throws ValidateException, BusinessException, SQLException, RepoException {
+        if(keyEvent.getCode()==KeyCode.ENTER){
+            sendMessage(null);
         }
     }
 }
