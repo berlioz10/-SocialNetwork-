@@ -7,59 +7,68 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<HBox prefHeight="400.0" prefWidth="543.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.HelloController">
+<HBox fx:id="containingWindow" prefHeight="601.0" prefWidth="1073.0" style="-fx-background-color: MEDIUMSLATEBLUE;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.HelloController">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="226.0">
          <children>
-            <TableView fx:id="friendshipTable" onMouseClicked="#selectFriendship" prefHeight="403.0" prefWidth="226.0">
+            <TableView fx:id="friendshipTable" onMouseClicked="#selectFriendship" prefHeight="403.0" prefWidth="226.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;">
               <columns>
-                  <TableColumn fx:id="relationColumn" prefWidth="53.60000687837601" text="Relation" />
-                <TableColumn fx:id="userColumn" prefWidth="111.99999618530273" text="User" />
-                  <TableColumn fx:id="statusColumn" prefWidth="62.4000244140625" text="Status" />
+                  <TableColumn fx:id="relationColumn" prefWidth="36.79998850822449" text="Relation" />
+                <TableColumn fx:id="userColumn" prefWidth="113.60000228881836" text="User" />
+                  <TableColumn fx:id="statusColumn" prefWidth="79.19998168945312" text="Status" />
               </columns>
             </TableView>
          </children>
       </VBox>
-      <VBox prefHeight="400.0" prefWidth="342.0">
+      <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="342.0">
          <children>
-            <VBox prefHeight="67.0" prefWidth="317.0">
+            <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: midnightblue;">
                      <children>
-                        <Label alignment="CENTER" prefHeight="66.0" prefWidth="98.0" text="Current user" />
-                        <TextField fx:id="selectedUser" alignment="CENTER" onKeyPressed="#tryToFindUserByID" prefHeight="89.0" prefWidth="226.0" />
+                        <Label alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="98.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midgnightblue;" text="Current user">
+                           <font>
+                              <Font name="Times New Roman" size="14.0" />
+                           </font></Label>
+                        <TextField fx:id="selectedUser" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#tryToFindUserByID" prefHeight="89.0" prefWidth="226.0" style="-fx-background-color: cyan;" />
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <TableView fx:id="userTable" onMouseClicked="#selectedUser" prefHeight="144.0" prefWidth="317.0">
+            <TableView fx:id="userTable" onMouseClicked="#selectedUser" prefHeight="144.0" prefWidth="317.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;">
               <columns>
-                <TableColumn fx:id="userID" prefWidth="34.399961829185486" text="ID" />
-                  <TableColumn fx:id="userSurname" prefWidth="136.80005645751953" text="Surname" />
-                  <TableColumn fx:id="userFirstName" prefWidth="145.5999755859375" text="First Name" />
+                <TableColumn fx:id="userID" prefWidth="36.80006265640259" text="ID" />
+                  <TableColumn fx:id="userSurname" prefWidth="151.19995880126953" text="Surname" />
+                  <TableColumn fx:id="userFirstName" prefWidth="153.60003662109375" text="First Name" />
               </columns>
             </TableView>
-            <HBox prefHeight="23.0" prefWidth="317.0">
+            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" text="Add friend" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealCurrentFriends" prefHeight="26.0" prefWidth="278.0" text="Remove friend" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealPotentialFriends" prefHeight="26.0" prefWidth="290.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Add friend" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#revealCurrentFriends" prefHeight="26.0" prefWidth="278.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: Midnightblue;" text="Remove friend" />
                </children>
             </HBox>
-            <TableView fx:id="hiddenTable" onMouseClicked="#setPassiveUser" prefHeight="135.0" prefWidth="317.0" visible="false">
+            <TableView fx:id="hiddenTable" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setPassiveUser" prefHeight="135.0" prefWidth="317.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" visible="false">
               <columns>
                 <TableColumn fx:id="hiddenID" prefWidth="31.999924063682556" text="ID" />
                 <TableColumn fx:id="hiddenSurname" prefWidth="132.00006675720215" text="Surname" />
                   <TableColumn fx:id="hiddenFirstName" prefWidth="153.5999755859375" text="First Name" />
               </columns>
             </TableView>
-            <HBox fx:id="changeStatusSection" prefHeight="26.0" prefWidth="317.0" visible="false">
+            <HBox fx:id="changeStatusSection" prefHeight="26.0" prefWidth="317.0" style="-fx-border-color: midnightblue; -fx-background-color: cyan;" visible="false">
                <children>
-                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" text="Unfriend/Befriend" />
-                  <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" text="PersonName" />
+                  <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#changeStatusOfFriendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend" />
+                  <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: mignightblue;" text="PersonName" />
                </children>
             </HBox>
          </children>
       </VBox>
+      <TableView prefHeight="602.0" prefWidth="418.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;">
+        <columns>
+          <TableColumn minWidth="-Infinity" prefWidth="417.59996339082716" text="Messages" />
+        </columns>
+      </TableView>
    </children>
 </HBox>

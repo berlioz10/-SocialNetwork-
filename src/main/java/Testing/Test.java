@@ -38,6 +38,7 @@ class Tests {
     /**
      * teste pentru elementele din domeniul aplicatiei
      */
+
     @Test
     public void testDomain() {
         User user1 = new User(1, "Stan", "Castan");
