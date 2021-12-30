@@ -10,9 +10,13 @@ import Exceptions.RepoException;
 import Exceptions.ValidateException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.css.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,7 +35,6 @@ public class HelloController {
     @FXML
     public HBox changeStatusSection;
     public HBox containingWindow;
-
 
     // pseudo - fx: id(s)
     private Controller controller = Controller.getInstance();

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -22,6 +23,9 @@
                       <TableColumn fx:id="userColumn" prefWidth="104.79998397827148" resizable="false" text="User" />
                         <TableColumn fx:id="statusColumn" prefWidth="64.79998779296875" resizable="false" text="Status" />
                     </columns>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
                   </TableView>
                </children>
             </AnchorPane>
@@ -38,7 +42,10 @@
                               <Font name="Times New Roman" size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="selectedUser" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#try_to_find_user_by_ID" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: cyan;" />
+                        <TextField fx:id="selectedUser" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#try_to_find_user_by_ID" prefHeight="67.0" prefWidth="243.0" style="-fx-background-color: cyan;">
+                           <effect>
+                              <InnerShadow />
+                           </effect></TextField>
                      </children>
                   </HBox>
                </children>
@@ -49,6 +56,9 @@
                   <TableColumn fx:id="userFirstName" prefWidth="153.60003662109375" resizable="false" text="First Name" />
                   <TableColumn fx:id="userSurname" prefWidth="151.19995880126953" resizable="false" text="Surname" />
               </columns>
+               <effect>
+                  <InnerShadow />
+               </effect>
             </TableView>
             <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="317.0" style="-fx-background-color: cyan;">
                <children>
@@ -62,11 +72,17 @@
                   <TableColumn fx:id="hiddenFirstName" prefWidth="156.7999267578125" resizable="false" text="First Name" />
                 <TableColumn fx:id="hiddenSurname" prefWidth="151.20008087158203" resizable="false" text="Surname" />
               </columns>
+               <effect>
+                  <InnerShadow />
+               </effect>
             </TableView>
             <HBox fx:id="changeStatusSection" prefHeight="29.0" prefWidth="342.0" style="-fx-border-color: midnightblue; -fx-background-color: cyan;" visible="false">
                <children>
                   <Button fx:id="changeFriendStatus" mnemonicParsing="false" onAction="#change_status_of_friendship" prefHeight="26.0" prefWidth="128.0" style="-fx-background-color: MEDIUMSLATEBLUE; -fx-border-color: midnightblue;" text="Unfriend/Befriend" />
-                  <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-background-color: cyan;" text="PersonName" />
+                  <Label fx:id="passiveUserName" alignment="CENTER" prefHeight="30.0" prefWidth="266.0" style="-fx-background-color: cyan;" text="PersonName">
+                     <effect>
+                        <InnerShadow />
+                     </effect></Label>
                </children>
             </HBox>
          </children>
@@ -82,6 +98,9 @@
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
                   </TableView>
                </children>
             </AnchorPane>
@@ -100,7 +119,10 @@
                         </AnchorPane>
                         <AnchorPane HBox.hgrow="ALWAYS">
                            <children>
-                              <TextField fx:id="messageBody" onKeyPressed="#send_message_via_enter" prefHeight="54.0" prefWidth="334.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TextField fx:id="messageBody" onKeyPressed="#send_message_via_enter" prefHeight="54.0" prefWidth="334.0" style="-fx-background-color: cyan; -fx-border-color: midnightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <effect>
+                                    <InnerShadow />
+                                 </effect></TextField>
                            </children>
                         </AnchorPane>
                      </children>
