@@ -20,11 +20,11 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 400);
 
         //makes all windows related to this application to use the same icon given by the relative path
-        Window.getWindows().addListener((ListChangeListener<Window>) c -> {
+        /*Window.getWindows().addListener((ListChangeListener<Window>) c -> {
             while (c.next()) {
                 for (Window window : c.getAddedSubList()) {
                     if (window instanceof Stage) {
@@ -34,14 +34,14 @@ public class HelloApplication extends Application {
             }
         });
 
-        stage.setTitle("Webber");
+        stage.setTitle("Webber");*/
         stage.setScene(scene);
-
+        /*
         stage.setMinHeight(315);
         stage.setMinWidth(580);
 
         stage.setMaxHeight(490);
-        stage.setMaxWidth(980);
+        stage.setMaxWidth(980);*/
         stage.show();
     }
 

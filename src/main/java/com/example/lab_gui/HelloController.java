@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -102,7 +103,9 @@ public class HelloController {
     private TableColumn<FriendshipDTO, String> statusColumn;
 
     @FXML
-    public void initialize() {
+    public void initialize() {.;
+
+
         load();
         set_controller(Controller.getInstance());
     }
@@ -438,5 +441,12 @@ public class HelloController {
         if(keyEvent.getCode()==KeyCode.ENTER){
             send_message(null);
         }
+    }
+
+    @FXML
+    private void receiveData(MouseEvent mouseEvent) {
+        Node node = (Node) mouseEvent.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        currentUserControl = (UserDTO) stage.getUserData();
     }
 }
