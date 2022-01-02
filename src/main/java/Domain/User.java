@@ -19,6 +19,13 @@ public class User implements Identifiable<Integer> {
         this.surname = surname;
     }
 
+    public User(String firstName, String surname, String username, String password) {
+        this.firstName = firstName;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+    }
+
     /**
      * @return returneaza id-ul de tipul numar intreg al unui utilizator
      */

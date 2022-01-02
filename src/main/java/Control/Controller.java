@@ -83,6 +83,7 @@ public class Controller {
     }
 
     /**
+     * @deprecated use sign up instead
      * @param firstName prenumele utilizatorului care va fi adaugat
      * @param surname numele utilizatorului care va fi adaugat
      * @throws ValidateException arunca exceptie daca numele/prenumele nu sunt valide

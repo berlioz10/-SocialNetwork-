@@ -50,13 +50,15 @@ public class UserService extends AbstractService<Integer, User>{
      */
     @Override
     public int createRecord(ArrayList<Object> params) throws SQLException, BusinessException, ValidateException, RepoException {
-        if(params.size()!=2)
+        if(params.size()!=4)
             throw new BusinessException("Numar invalid de parametri\n");
 
         String firstName =(String)params.get(0);
         String surname =(String)params.get(1);
+        String username = (String)params.get(2);
+        String password = (String)params.get(3);
 
-        User user = new User(firstName, surname);
+        User user = new User(firstName, surname, username, password);
         validator.validate(user);
         int id = repository.add(user);
         return id;

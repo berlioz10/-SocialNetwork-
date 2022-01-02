@@ -23,7 +23,10 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "INSERT INTO users (first_name, last_name, username, password) VALUES RETURNING id" +
-                        "('" + user.getFirstName() + "','" + user.getSurname() + "')");
+                        "('" + user.getFirstName() +
+                        "','" + user.getSurname() +
+                        "','" + user.getUsername() +
+                        "','" + user.getPassword() + "')");
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         return resultSet.getInt("id");
