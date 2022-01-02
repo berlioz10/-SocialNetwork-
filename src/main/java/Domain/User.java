@@ -10,6 +10,8 @@ public class User implements Identifiable<Integer> {
     private int id;
     private String firstName;
     private String surname;
+    private String username;
+    private String password;
 
     public User(String firstName, String surname) {
         this.id = 1;
@@ -50,6 +52,14 @@ public class User implements Identifiable<Integer> {
         this.surname = surname;
     }
 
+    public User(int id, String firstName, String surname, String username, String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+    }
+
     /**
      * @param firstName atribuie numelui utilizatorului parametrul de tip sir de caractere dat
      */
@@ -62,6 +72,22 @@ public class User implements Identifiable<Integer> {
      */
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**

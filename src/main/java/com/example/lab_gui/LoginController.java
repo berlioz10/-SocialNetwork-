@@ -3,7 +3,6 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.User;
 import Domain.UserDTO;
-import Utils.CurrentUserSingleTon;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +27,7 @@ public class LoginController {
     @FXML
     public Button loginButton;
     @FXML
-    public Button leaveButton;
+    public Button signupButton;
 
     @FXML
     public void onLoginClicked(ActionEvent actionEvent) throws IOException {
@@ -45,7 +44,7 @@ public class LoginController {
         }
 
         if(err.length() > 0) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(err);
             alert.show();
@@ -75,7 +74,6 @@ public class LoginController {
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
 
-            stage.close();
             // Stage stage = new Stage();
 
             stage.setTitle("Webber");
@@ -88,5 +86,25 @@ public class LoginController {
             stage.setMaxWidth(980);
             stage.show();
         }
+    }
+
+    public void onSignUpClicked(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup.fxml"));
+        Parent parent = fxmlLoader.load();
+        Scene scene = new Scene(parent, 320, 400);
+
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+
+        stage.close();
+
+        stage.setTitle("Sign Up");
+        stage.setScene(scene);
+
+        stage.setMinHeight(285);
+        stage.setMinWidth(250);
+
+        stage.setMaxHeight(285);
+        stage.setMaxWidth(250);
+        stage.show();
     }
 }

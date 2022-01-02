@@ -22,7 +22,7 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
     public Integer add(User user) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO users (first_name, last_name) VALUES RETURNING id" +
+                "INSERT INTO users (first_name, last_name, username, password) VALUES RETURNING id" +
                         "('" + user.getFirstName() + "','" + user.getSurname() + "')");
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -46,7 +46,9 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
     public void update(Integer id, User user) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users " +
-                "SET first_name='" + user.getFirstName() + "', last_name='" + user.getSurname() + "' WHERE id=" + id);
+                "SET first_name='" + user.getFirstName() +
+                "', last_name='" + user.getSurname() +
+                "' WHERE id=" + id);
         if (preparedStatement.executeUpdate() == 0)
             throw new RepoException("Element inexistent\n");
     }
