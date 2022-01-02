@@ -8,6 +8,7 @@ import Domain.UserDTO;
 import Exceptions.BusinessException;
 import Exceptions.RepoException;
 import Exceptions.ValidateException;
+import Utils.CurrentUserSingleTon;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.css.Style;
@@ -103,9 +104,7 @@ public class HelloController {
     private TableColumn<FriendshipDTO, String> statusColumn;
 
     @FXML
-    public void initialize() {.;
-
-
+    public void initialize() {
         load();
         set_controller(Controller.getInstance());
     }
@@ -444,9 +443,13 @@ public class HelloController {
     }
 
     @FXML
-    private void receiveData(MouseEvent mouseEvent) {
-        Node node = (Node) mouseEvent.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        currentUserControl = (UserDTO) stage.getUserData();
+    public void login(UserDTO user) throws SQLException {
+        currentUserControl = user;
+        selectedUser.setText(
+                currentUserControl.toString()
+        );
+        load_friendships();
+        hide_relations_menu();
+        hide_messages();
     }
 }

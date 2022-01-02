@@ -5,8 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="157.0" prefWidth="265.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.Login">
+<AnchorPane maxHeight="376.0" maxWidth="443.0" minHeight="203.0" minWidth="271.0" prefHeight="376.0" prefWidth="443.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lab_gui.LoginController">
    <children>
       <TextField fx:id="usernameBox" layoutX="92.0" layoutY="35.0" />
       <TextField fx:id="passwordBox" layoutX="92.0" layoutY="72.0" />

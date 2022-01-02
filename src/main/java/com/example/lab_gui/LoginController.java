@@ -3,10 +3,12 @@ package com.example.lab_gui;
 import Control.Controller;
 import Domain.User;
 import Domain.UserDTO;
+import Utils.CurrentUserSingleTon;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -18,7 +20,7 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class Login {
+public class LoginController {
     @FXML
     public TextField usernameBox;
     @FXML
@@ -43,11 +45,22 @@ public class Login {
         }
 
         if(err.length() > 0) {
-            Alert.AlertType.valueOf(err);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(err);
+            alert.show();
         }
         else {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 320, 400);
+            Parent parent = fxmlLoader.load();
+            Scene scene = new Scene(parent, 320, 400);
+            HelloController helloController = fxmlLoader.getController();
+
+            try {
+                helloController.login(new UserDTO(user.getId(), user.getFirstName(), user.getSurname()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             //makes all windows related to this application to use the same icon given by the relative path
             Window.getWindows().addListener((ListChangeListener<Window>) c -> {
@@ -60,12 +73,13 @@ public class Login {
                 }
             });
 
-            Stage stage = new Stage();
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+
+            stage.close();
+            // Stage stage = new Stage();
 
             stage.setTitle("Webber");
             stage.setScene(scene);
-
-            stage.setUserData(new UserDTO(user.getId(), user.getFirstName(), user.getSurname()));
 
             stage.setMinHeight(315);
             stage.setMinWidth(580);
@@ -73,9 +87,6 @@ public class Login {
             stage.setMaxHeight(490);
             stage.setMaxWidth(980);
             stage.show();
-            Stage stageClosing = (Stage) leaveButton.getScene().getWindow();
-
-            stageClosing.close();
         }
     }
 }

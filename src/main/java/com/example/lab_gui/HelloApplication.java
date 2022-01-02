@@ -36,12 +36,14 @@ public class HelloApplication extends Application {
 
         stage.setTitle("Webber");*/
         stage.setScene(scene);
-        /*
-        stage.setMinHeight(315);
-        stage.setMinWidth(580);
+        stage.setMinHeight(200);
+        stage.setMinWidth(271);
 
-        stage.setMaxHeight(490);
-        stage.setMaxWidth(980);*/
+        stage.setMaxHeight(200);
+        stage.setMaxWidth(271);
+        stage.setMaxHeight(200);
+        stage.setHeight(200);
+        stage.setWidth(271);
         stage.show();
     }
 
