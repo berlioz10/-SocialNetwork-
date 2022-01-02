@@ -10,6 +10,7 @@ import Repo.DatabaseUserRepository;
 import Repo.Repository;
 import Service.Service;
 import Utils.Graph;
+import Utils.Hasher;
 import Utils.UtilsFunctions;
 import Validate.FriendshipValidator;
 import Validate.MessageValidator;
@@ -18,10 +19,7 @@ import Validate.Validator;
 import Service.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -610,6 +608,19 @@ public class Controller {
                     && friendship.getFriendship_request() == 2)
                 return true;
         return false;
+    }
+
+    public User login(String username, String password) throws SQLException {
+        List<User> list = ((List<User>) userService.getRecords()).stream()
+                .filter((x) -> Objects.equals(x.getUsername(), username)).collect(Collectors.toList());
+        if(list.size() == 0)
+            return null;
+
+        User user = list.get(0);
+
+        if(!Hasher.isHashedCorrectly(user.getPassword(), password))
+            return null;
+        return user;
     }
 }
 
