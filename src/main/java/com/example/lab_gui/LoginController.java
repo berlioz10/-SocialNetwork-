@@ -30,18 +30,22 @@ public class LoginController {
     public Button signupButton;
 
     @FXML
-    public void onLoginClicked(ActionEvent actionEvent) throws IOException {
-        int id = Integer.parseInt(usernameBox.getText());
+    public void onLoginClicked(ActionEvent actionEvent) throws IOException, SQLException {
+        String username = usernameBox.getText();
+        String password = passwordBox.getText();
         User user = null;
 
         String err = "";
-        try {
-            user = Controller.getInstance().findUser(id);
-            if(user == null)
+        if(username.length() == 0)
+            err += "The username box must not be empty!\n";
+        else if(password.length() == 0)
+            err += "The password box must not be empty!\n";
+        else {
+            user = Controller.getInstance().login(username, password);
+            if (user == null)
                 err += "User does not exist!\n";
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+
 
         if(err.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -73,8 +77,6 @@ public class LoginController {
             });
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
-
-            // Stage stage = new Stage();
 
             stage.setTitle("Webber");
             stage.setScene(scene);

@@ -96,6 +96,8 @@ public class Controller {
         userService.createRecord(params);
     }
 
+
+
     /**
      * @param id este id-ul utilizatorului caruia dorim sa ii aflam relatiile de prietenie (potentiale)
      * @return un vector de id-uri reprezentand id-urile relatiilor de prietenie ale utilizatorului in cauza

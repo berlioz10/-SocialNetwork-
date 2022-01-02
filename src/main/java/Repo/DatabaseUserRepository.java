@@ -79,7 +79,9 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
         while (resultSet.next()) {
             userArrayList.add(new User(resultSet.getInt("id"),
                     resultSet.getString("first_name"),
-                    resultSet.getString("last_name")
+                    resultSet.getString("last_name"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password")
             ));
         }
         return userArrayList;
