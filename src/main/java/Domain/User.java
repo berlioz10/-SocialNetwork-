@@ -20,6 +20,7 @@ public class User implements Identifiable<Integer> {
     }
 
     public User(String firstName, String surname, String username, String password) {
+        this.id = 1;
         this.firstName = firstName;
         this.surname = surname;
         this.username = username;

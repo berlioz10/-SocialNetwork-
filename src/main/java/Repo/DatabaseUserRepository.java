@@ -22,11 +22,11 @@ public class DatabaseUserRepository implements Repository<Integer, User> {
     public Integer add(User user) throws RepoException, SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO users (first_name, last_name, username, password) VALUES RETURNING id" +
+                "INSERT INTO users (first_name, last_name, username, password) VALUES " +
                         "('" + user.getFirstName() +
                         "','" + user.getSurname() +
                         "','" + user.getUsername() +
-                        "','" + user.getPassword() + "')");
+                        "','" + user.getPassword() + "') RETURNING id");
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         return resultSet.getInt("id");

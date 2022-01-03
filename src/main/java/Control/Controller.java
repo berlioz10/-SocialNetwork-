@@ -624,5 +624,28 @@ public class Controller {
             return null;
         return user;
     }
+
+    public void signup(String firstname, String surname, String username, String password, String confirm) throws SQLException, BusinessException, ValidateException, RepoException {
+        String error = "";
+        if(firstname.length() == 0)
+            error += "Firstname cannot be null!\n";
+        if(surname.length() == 0)
+            error += "Surname cannot be null!\n";
+        if(username.length() == 0)
+            error += "Username cannot be null!\n";
+        if(password.length() == 0)
+            error += "Password cannot be null!\n";
+        if(!Objects.equals(password, confirm))
+            error += "The passwords are not the same!\n";
+        if(error.length() != 0)
+            throw new BusinessException(error);
+        ArrayList<Object> objects = new ArrayList<>();
+
+        objects.add(firstname);
+        objects.add(surname);
+        objects.add(username);
+        objects.add(password);
+        userService.createRecord(objects);
+    }
 }
 
