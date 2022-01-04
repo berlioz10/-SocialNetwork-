@@ -13,5 +13,6 @@ public class Hasher {
 
     public static boolean isHashedCorrectly(String hash, String pass) {
         return Objects.equals(hash, pass);
+
     }
 }
