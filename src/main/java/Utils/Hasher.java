@@ -7,12 +7,8 @@ public class Hasher {
         return pass;
     }
 
-    public static String unhash(String pass) {
-        return pass;
-    }
-
     public static boolean isHashedCorrectly(String hash, String pass) {
-        return Objects.equals(hash, pass);
+        return Objects.equals(hash, hash(pass));
 
     }
 }
